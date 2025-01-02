@@ -26,16 +26,18 @@ if page.status_code == 200:
         # print(f"{id_shoe}, {model_shoe}, {"".join(filter(str.isalpha, name_shoe))}, {color_shoe}, {season_shoe}, {prices_shoe}")
 
 
+        clear_link = ""
+        links = soup.find("div", class_="product__block-info")
+        for new_data in links:
+            link = data.find('a', href=True)
 
-        img_tag = soup.find("img", class_="product__img_bg")
-        img_url = img_tag["src"] if img_tag else ""
+            # Здесь я сделал строку которая отдельно отвечает за "чистоту" строки
+            clear_link = link['href']
 
         data_about_shoe.append(
-            f"id: {id_shoe}, model: {model_shoe}, name: {name_shoe}, color: {color_shoe}, season: {season_shoe}, price: {prices_shoe}, picture: {img_url}"
+            f"id: {id_shoe}, model: {model_shoe}, name: {name_shoe}, color: {color_shoe}, season: {season_shoe}, price: {prices_shoe}, link on shoe: {"https://marioberlucci.ru" + clear_link}"
         )
 
-
-
     with open("All_shoes", "w", encoding="utf-8") as all_sh:
-        all_sh.write("\n".join(data_about_shoe))
+        all_sh.write("\n".join(set(list(data_about_shoe))))
 
